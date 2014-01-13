@@ -11,7 +11,6 @@ import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
 import com.appdynamics.integration.funnel.exceptions.AppDFunnelExecutionError;
-import com.appdynamics.integration.funnel.exceptions.AppDFunnelInstantiationError;
 import com.appdynamics.integration.funnel.funneltypes.FunnelInterface;
 
 public class FileOutputPlugin implements FunnelOutputInterface 
@@ -32,12 +31,10 @@ public class FileOutputPlugin implements FunnelOutputInterface
 		// load the xml into a DOM
 		SAXReader reader = new SAXReader();
 		Document doc = null;
-		Element docRoot = null;
-
+		
 		try
 		{
 			doc = reader.read(confFile);
-			docRoot = doc.getRootElement();
 		} 
 		catch (DocumentException de) 
 		{

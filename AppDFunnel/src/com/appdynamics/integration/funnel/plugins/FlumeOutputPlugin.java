@@ -44,12 +44,10 @@ public class FlumeOutputPlugin implements FunnelOutputInterface
 		// load the xml into a DOM
 		SAXReader reader = new SAXReader();
 		Document doc = null;
-		Element docRoot = null;
-
+		
 		try
 		{
 			doc = reader.read(confFile);
-			docRoot = doc.getRootElement();
 		} 
 		catch (DocumentException de) 
 		{

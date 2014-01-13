@@ -11,35 +11,17 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.HelpFormatter;
 
 // funnel exception handling classes
-
-
-
-
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 //xml parsing libraries
-import org.xml.sax.SAXException;
-
-
-
-
-
-
-
-
 import com.appdynamics.integration.funnel.exceptions.AppDFunnelExecutionError;
 import com.appdynamics.integration.funnel.exceptions.AppDFunnelInstantiationError;
 
-
-
-
-
 //file io libraries
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -75,12 +57,10 @@ public class AppDFunnel
 		// load the xml into a DOM
 		SAXReader reader = new SAXReader();
 		Document doc = null;
-		Element docRoot = null;
-
+		
 		try
 		{
 			doc = reader.read(confFile);
-			docRoot = doc.getRootElement();
 		} 
 		catch (DocumentException de) 
 		{

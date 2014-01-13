@@ -7,8 +7,6 @@ import org.dom4j.Element;
 import com.appdynamics.integration.funnel.ControllerConfiguration;
 import com.appdynamics.integration.funnel.exceptions.AppDFunnelExecutionError;
 import com.appdynamics.integration.funnel.exceptions.AppDFunnelInstantiationError;
-import com.appdynamics.integration.funnel.plugins.FunnelOutputInterface;
-import com.appdynamics.integration.funnel.plugins.FunnelTransformationInterface;
 
 public interface FunnelInterface 
 {
