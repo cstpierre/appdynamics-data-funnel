@@ -1,0 +1,421 @@
+<?xml version="1.0"?>
+<funnelconfig>
+  <!-- CONTROLLER CONNECTION INFORMATION -->
+  <!-- All of these fields are required. For multitenant or SaaS controllers accountname will be -->
+  <!-- the appropriate account name. For single tenant on premise controllers, use "customer1"   -->
+  <controllerinfo>
+    <username>admin</username>
+    <accountname>customer1</accountname>
+    <password>password</password>
+    <controllerhost>cstp-controller</controllerhost>
+    <controllerport>8090</controllerport>
+  </controllerinfo>
+  
+  <!-- LIST OF THE FUNNELS TO RUN -->
+  <!-- The execution attribute specifies whether to run the filters serially or in parallel -->
+  <!-- Valid values are: SERIAL or PARALLEL                                                 -->
+  <funnels execution="SERIAL">
+    <!-- GENERAL FUNNEL ATTRIBUTE INFORMATION -->
+    <!-- Every funnel has three attributes, and they are all required attributes. They cannot  -->
+    <!-- be empty. The description of each attribute is below                                  -->
+    <!-- name:       This is the name of the funnel. Just a human readable name. It has no     -->
+    <!--             programatic consequence unless there as a transformation or output plugin -->
+    <!--             that makes use of this name                                               -->
+    <!-- funneltype: This attribute dictates which funnel runner will be run by the AppDFunnel -->
+    <!--             Valid funnel types are: metric, businesstransaction, applications, tiers  -->
+    <!--             nodes, tiers, tiersnodes, problems, and events.                           -->
+    <!-- outputtype: Output type specifies how the rest interface will return data to the      -->
+    <!--             funnel.  Valid values for this are XML or JSON                            -->
+    
+    
+    <!-- FUNNEL TYPE: METRIC DATA -->
+    <!-- This is the configuration for a funnel that returns metric data.                 -->
+    <!-- Time range for the data returned is scoped by the parameters passed in to the    -->
+    <!-- the AppDFunnel program via the -start and -end command line options.             -->
+    <!-- rollup:               The value of this field specifies whether the metrics for  -->
+    <!--                       time range specified will be rolled up or not              -->
+    <!-- applicationid:        The value of this field specifies the business application -->
+    <!--                       to return metrics for. The value of this field can either  -->
+    <!--                       be the application name, or the application id.            -->
+    <!-- metricpath:           The value of this field specfies which metrics will be     -->
+    <!--                       returned to the funnel.  See the REST API documentation    -->
+    <!--                       for valid values for metric path, or copy a metric path    -->
+    <!--                       out of the metric browser                                  -->
+    <!-- transformationplugin: Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelTransformationInterface.    -->
+    <!--                       The transformation plugin is run prior to the output       -->
+    <!--                       Example transformations are things like: Transform XML to  -->
+    <!--                       to HTML, Transform XML to SQL Statements, etc. There are   -->
+    <!--                       two built in transformation plugins. You can use either    -->
+    <!--       com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin   -->
+    <!--          OR                                                                      -->
+    <!--       com.appdynamics.integration.funnel.plugins.NoTransformationPlugin          -->
+    <!--                       if you don't implement your own transformation             -->
+    <!-- funneloutputplugin:   Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelOutputInterface.  The       -->
+    <!--                       output plugin is used to send data to some output source.  -->
+    <!--                       Examples of output plugins include things like a           -->
+    <!--                       System.out streamer, sending the data to Flume for pumping -->
+    <!--                       to Hadoop, writing the metrics to a database, etc. There   -->
+    <!--                       are two builtin output plugins:                            -->
+    <!--           com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin    -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FlumeOutputPlugin           -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FileOutputPlugin            -->
+    <!--                       Use one of these if you don't implement your own output    -->
+    <!--                       plugin.                                                    -->
+    <funnel name="Infrastructure CPU Metrics" funneltype="metric" outputtype="XML">
+      <rollup>false</rollup>
+      <applicationid>Pet Clinic</applicationid>
+      <metricpath>Application Infrastructure Performance|AppServer|Hardware Resources|CPU|%Busy</metricpath>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin</transformationplugin>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+    </funnel>
+    
+    <!-- FUNNEL TYPE: BUSINESS TRANSACTION -->
+    <!-- This is the configuration for a funnel that returns information about BTs.       -->
+    <!-- excluded:             The value of this field specifies whether the BTs for      -->
+    <!--                       the application which have been excluded from monitoring   -->
+    <!--                       will be returned. A value of false returns BTs that are    -->
+    <!--                       included in monitoring                                     -->
+    <!-- applicationid:        The value of this field specifies the business application -->
+    <!--                       to return metrics for. The value of this field can either  -->
+    <!--                       be the application name, or the application id.            -->
+    <!-- transformationplugin: Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelTransformationInterface.    -->
+    <!--                       The transformation plugin is run prior to the output       -->
+    <!--                       Example transformations are things like: Transform XML to  -->
+    <!--                       to HTML, Transform XML to SQL Statements, etc. There are   -->
+    <!--                       two built in transformation plugins. You can use either    -->
+    <!--       com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin   -->
+    <!--          OR                                                                      -->
+    <!--       com.appdynamics.integration.funnel.plugins.NoTransformationPlugin          -->
+    <!--                       if you don't implement your own transformation             -->
+    <!-- funneloutputplugin:   Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelOutputInterface.  The       -->
+    <!--                       output plugin is used to send data to some output source.  -->
+    <!--                       Examples of output plugins include things like a           -->
+    <!--                       System.out streamer, sending the data to Flume for pumping -->
+    <!--                       to Hadoop, writing the metrics to a database, etc. There   -->
+    <!--                       are two builtin output plugins:                            -->
+    <!--           com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin    -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FlumeOutputPlugin           -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FileOutputPlugin            -->
+    <!--                       Use one of these if you don't implement your own output    -->
+    <!--                       plugin.                                                    -->
+    <funnel name="Business Transaction List in Application" funneltype="businesstransaction" outputtype="JSON">
+      <applicationid>2</applicationid>
+      <excluded>false</excluded>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.FileOutputPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <!-- FUNNEL TYPE: APPLICATIONS -->
+    <!-- This is the configuration for a funnel that returns a liet of business apps      -->
+    <!-- applicationid:        The value of this field specifies the business application -->
+    <!--                       to return metrics for. The value of this field can either  -->
+    <!--                       be the application name, or the application id.            -->
+    <!-- transformationplugin: Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelTransformationInterface.    -->
+    <!--                       The transformation plugin is run prior to the output       -->
+    <!--                       Example transformations are things like: Transform XML to  -->
+    <!--                       to HTML, Transform XML to SQL Statements, etc. There are   -->
+    <!--                       two built in transformation plugins. You can use either    -->
+    <!--       com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin   -->
+    <!--          OR                                                                      -->
+    <!--       com.appdynamics.integration.funnel.plugins.NoTransformationPlugin          -->
+    <!--                       if you don't implement your own transformation             -->
+    <!-- funneloutputplugin:   Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelOutputInterface.  The       -->
+    <!--                       output plugin is used to send data to some output source.  -->
+    <!--                       Examples of output plugins include things like a           -->
+    <!--                       System.out streamer, sending the data to Flume for pumping -->
+    <!--                       to Hadoop, writing the metrics to a database, etc. There   -->
+    <!--                       are two builtin output plugins:                            -->
+    <!--           com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin    -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FlumeOutputPlugin           -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FileOutputPlugin            -->
+    <!--                       Use one of these if you don't implement your own output    -->
+    <!--                       plugin.                                                    -->
+    <funnel name="List of Applications" funneltype="applications" outputtype="JSON">
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.FlumeOutputPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <!-- FUNNEL TYPE: NODES -->
+    <!-- This is the configuration for a funnel that information about nodes in the app   -->
+    <!-- applicationid:        The value of this field specifies the business application -->
+    <!--                       to return metrics for. The value of this field can either  -->
+    <!--                       be the application name, or the application id.            -->
+    <!-- nodeid:               OPTIONAL: If this value is specified, only infomration     -->
+    <!--                       about that node will be retuned. The value can be nodeid   -->
+    <!--                       or node name. Element must be there, the value is optional -->
+    <!-- transformationplugin: Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelTransformationInterface.    -->
+    <!--                       The transformation plugin is run prior to the output       -->
+    <!--                       Example transformations are things like: Transform XML to  -->
+    <!--                       to HTML, Transform XML to SQL Statements, etc. There are   -->
+    <!--                       two built in transformation plugins. You can use either    -->
+    <!--       com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin   -->
+    <!--          OR                                                                      -->
+    <!--       com.appdynamics.integration.funnel.plugins.NoTransformationPlugin          -->
+    <!--                       if you don't implement your own transformation             -->
+    <!-- funneloutputplugin:   Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelOutputInterface.  The       -->
+    <!--                       output plugin is used to send data to some output source.  -->
+    <!--                       Examples of output plugins include things like a           -->
+    <!--                       System.out streamer, sending the data to Flume for pumping -->
+    <!--                       to Hadoop, writing the metrics to a database, etc. There   -->
+    <!--                       are two builtin output plugins:                            -->
+    <!--           com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin    -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FlumeOutputPlugin           -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FileOutputPlugin            -->
+    <!--                       Use one of these if you don't implement your own output    -->
+    <!--                       plugin.                                                    -->
+    <funnel name="List of Nodes in an Application" funneltype="nodes" outputtype="XML">
+      <applicationid>2</applicationid>
+      <nodeid></nodeid>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <funnel name="Nodes by Node Identifier (name)" funneltype="nodes" outputtype="XML">
+      <applicationid>Pet Clinic</applicationid>
+      <nodeid>Node1</nodeid>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <funnel name="Nodes by Node Identifier (id)" funneltype="nodes" outputtype="XML">
+      <applicationid>2</applicationid>
+      <nodeid>3</nodeid>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <!-- FUNNEL TYPE: TIERS -->
+    <!-- This is the configuration for a funnel that information about tiers in the app   -->
+    <!-- applicationid:        The value of this field specifies the business application -->
+    <!--                       to return metrics for. The value of this field can either  -->
+    <!--                       be the application name, or the application id.            -->
+    <!-- tierid:               OPTIONAL: If this value is specified, only infomration     -->
+    <!--                       about that tier will be returned. The value can be tierid  -->
+    <!--                       or tier name. The element must be there, the value is      -->
+    <!--                       optional.                                                  -->
+    <!-- transformationplugin: Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelTransformationInterface.    -->
+    <!--                       The transformation plugin is run prior to the output       -->
+    <!--                       Example transformations are things like: Transform XML to  -->
+    <!--                       to HTML, Transform XML to SQL Statements, etc. There are   -->
+    <!--                       two built in transformation plugins. You can use either    -->
+    <!--       com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin   -->
+    <!--          OR                                                                      -->
+    <!--       com.appdynamics.integration.funnel.plugins.NoTransformationPlugin          -->
+    <!--                       if you don't implement your own transformation             -->
+    <!-- funneloutputplugin:   Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelOutputInterface.  The       -->
+    <!--                       output plugin is used to send data to some output source.  -->
+    <!--                       Examples of output plugins include things like a           -->
+    <!--                       System.out streamer, sending the data to Flume for pumping -->
+    <!--                       to Hadoop, writing the metrics to a database, etc. There   -->
+    <!--                       are two builtin output plugins:                            -->
+    <!--           com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin    -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FlumeOutputPlugin           -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FileOutputPlugin            -->
+    <!--                       Use one of these if you don't implement your own output    -->
+    <!--                       plugin.                                                    -->
+    <funnel name="Tiers in Application" funneltype="tiers" outputtype="XML">
+      <applicationid>2</applicationid>
+      <tierid></tierid>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <funnel name="Tiers by Tier Identifier (name)" funneltype="tiers" outputtype="XML">
+      <applicationid>Pet Clinic</applicationid>
+      <tierid>AppServer</tierid>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <funnel name="Tiers by Tier Identifier (id)" funneltype="tiers" outputtype="XML">
+      <applicationid>2</applicationid>
+      <tierid>4</tierid>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <!-- FUNNEL TYPE: NODES IN TIER -->
+    <!-- This is the configuration for a funnel that gets information about nodes in tier -->
+    <!-- applicationid:        The value of this field specifies the business application -->
+    <!--                       to return metrics for. The value of this field can either  -->
+    <!--                       be the application name, or the application id.            -->
+    <!-- tierid:               This value indicates which tier you want to get node info  -->
+    <!--                       for.                                                       -->
+    <!-- transformationplugin: Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelTransformationInterface.    -->
+    <!--                       The transformation plugin is run prior to the output       -->
+    <!--                       Example transformations are things like: Transform XML to  -->
+    <!--                       to HTML, Transform XML to SQL Statements, etc. There are   -->
+    <!--                       two built in transformation plugins. You can use either    -->
+    <!--       com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin   -->
+    <!--          OR                                                                      -->
+    <!--       com.appdynamics.integration.funnel.plugins.NoTransformationPlugin          -->
+    <!--                       if you don't implement your own transformation             -->
+    <!-- funneloutputplugin:   Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelOutputInterface.  The       -->
+    <!--                       output plugin is used to send data to some output source.  -->
+    <!--                       Examples of output plugins include things like a           -->
+    <!--                       System.out streamer, sending the data to Flume for pumping -->
+    <!--                       to Hadoop, writing the metrics to a database, etc. There   -->
+    <!--                       are two builtin output plugins:                            -->
+    <!--           com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin    -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FlumeOutputPlugin           -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FileOutputPlugin            -->
+    <!--                       Use one of these if you don't implement your own output    -->
+    <!--                       plugin.                                                    -->
+    <funnel name="Nodes in Tier" funneltype="tiersnodes" outputtype="XML">
+      <applicationid>2</applicationid>
+      <tierid>4</tierid>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <!-- FUNNEL TYPE: PROBLEMS -->
+    <!-- This is the configuration for a funnel that gets problem information. The funnel -->
+    <!-- can get both health rule violations and policy violations.                       -->
+    <!-- Time range for the data returned is scoped by the parameters passed in to the    -->
+    <!-- the AppDFunnel program via the -start and -end command line options.             -->
+    <!-- applicationid:        The value of this field specifies the business application -->
+    <!--                       to return metrics for. The value of this field can either  -->
+    <!--                       be the application name, or the application id.            -->
+    <!-- problemtype:          This field tells you what type of problems you would like  -->
+    <!--                       get information for.  Valid values for this field are      -->
+    <!--                       "healthrule-violations" or "policy-violations".            -->
+    <!-- transformationplugin: Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelTransformationInterface.    -->
+    <!--                       The transformation plugin is run prior to the output       -->
+    <!--                       Example transformations are things like: Transform XML to  -->
+    <!--                       to HTML, Transform XML to SQL Statements, etc. There are   -->
+    <!--                       two built in transformation plugins. You can use either    -->
+    <!--       com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin   -->
+    <!--          OR                                                                      -->
+    <!--       com.appdynamics.integration.funnel.plugins.NoTransformationPlugin          -->
+    <!--                       if you don't implement your own transformation             -->
+    <!-- funneloutputplugin:   Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelOutputInterface.  The       -->
+    <!--                       output plugin is used to send data to some output source.  -->
+    <!--                       Examples of output plugins include things like a           -->
+    <!--                       System.out streamer, sending the data to Flume for pumping -->
+    <!--                       to Hadoop, writing the metrics to a database, etc. There   -->
+    <!--                       are two builtin output plugins:                            -->
+    <!--           com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin    -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FlumeOutputPlugin           -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FileOutputPlugin            -->
+    <!--                       Use one of these if you don't implement your own output    -->
+    <!--                       plugin.                                                    -->
+    <funnel name="Problems - Health Rule Violations" funneltype="problems" outputtype="XML">
+      <applicationid>2</applicationid>
+      <problemtype>healthrule-violations</problemtype>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <funnel name="Problems - Policy Violations" funneltype="problems" outputtype="XML">
+      <applicationid>2</applicationid>
+      <problemtype>policy-violations</problemtype>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel>
+    
+    <!-- FUNNEL TYPE: EVENTS -->
+    <!-- This is the configuration for a funnel that gets events information.             -->
+    <!-- Time range for the data returned is scoped by the parameters passed in to the    -->
+    <!-- the AppDFunnel program via the -start and -end command line options.             -->
+    <!-- applicationid:        The value of this field specifies the business application -->
+    <!--                       to return metrics for. The value of this field can either  -->
+    <!--                       be the application name, or the application id.            -->
+    <!-- eventtypes:           This field tells you what type of events you would like to -->
+    <!--                       get information for.  This should be a comma separated     -->
+    <!--                       list of event types.  Valid values are:                    -->
+    <!--                             APPLICATION_ERROR                                    -->
+    <!--                             STALL                                                -->
+    <!--                             DEADLOCK                                             -->
+    <!--                             MEMORY_LEAK                                          -->
+    <!--                             MEMORY_LEAK_DIAGNOSTICS                              -->
+    <!--                             LOW_HEAP_MEMORY                                      -->
+    <!--                             CUSTOM                                               -->
+    <!--                             APP_SERVER_RESTART                                   -->
+    <!--                             SYSTEM_LOG                                           -->
+    <!--                             INFO_INSTRUMENTATION_VISIBILITY                      -->
+    <!--                             AGENT_EVENT                                          -->
+    <!--                             AGENT_STATUS                                         -->
+    <!--                             ACTIVITY_TRACE                                       -->
+    <!--                             OBJECT_CONTENT_SUMMARY                               -->
+    <!--                             DIAGNOSTIC_SESSION                                   -->
+    <!--                             HIGH_END_TO_END_LATENCY                              -->
+    <!--                             APPLICATION_CONFIG_CHANGE                            -->
+    <!--                             APPLICATION_DEPLOYMENT                               -->
+    <!--                             AGENT_DIAGNOSTICS                                    -->
+    <!--                             MEMORY                                               -->
+    <!--                             LICENSE                                              -->
+    <!--                             CONTROLLER_AGENT_VERSION_INCOMPATIBILITY             -->
+    <!--                             DISK_SPACE                                           -->
+    <!--                             APPDYNAMICS_DATA                                     -->
+    <!--                             APPDYNAMICS_CONFIGURATION_WARNINGS                   -->
+    <!--                             POLICY_OPEN                                          -->
+    <!--                             POLICY_CLOSE                                         -->
+    <!--                             POLICY_UPGRADED                                      -->
+    <!--                             POLICY_DOWNGRADED                                    -->
+    <!--                             RESOURCE_POOL_LIMIT                                  -->
+    <!-- severities:           This field tells which severity events should be returned  -->
+    <!--                       This field is a comma separated list of the following vals -->
+    <!--                             INFO                                                 -->
+    <!--                             WARN                                                 -->
+    <!--                             ERROR                                                -->
+    <!-- transformationplugin: Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelTransformationInterface.    -->
+    <!--                       The transformation plugin is run prior to the output       -->
+    <!--                       Example transformations are things like: Transform XML to  -->
+    <!--                       to HTML, Transform XML to SQL Statements, etc. There are   -->
+    <!--                       two built in transformation plugins. You can use either    -->
+    <!--       com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin   -->
+    <!--          OR                                                                      -->
+    <!--       com.appdynamics.integration.funnel.plugins.NoTransformationPlugin          -->
+    <!--                       if you don't implement your own transformation             -->
+    <!-- funneloutputplugin:   Value of this field should be a class that                 -->
+    <!--                       implements the interface FunnelOutputInterface.  The       -->
+    <!--                       output plugin is used to send data to some output source.  -->
+    <!--                       Examples of output plugins include things like a           -->
+    <!--                       System.out streamer, sending the data to Flume for pumping -->
+    <!--                       to Hadoop, writing the metrics to a database, etc. There   -->
+    <!--                       are two builtin output plugins:                            -->
+    <!--           com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin    -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FlumeOutputPlugin           -->
+    <!--              OR                                                                  -->
+    <!--           com.appdynamics.integration.funnel.plugins.FileOutputPlugin            -->
+    <!--                       Use one of these if you don't implement your own output    -->
+    <!--                       plugin.                                                    -->
+    <funnel name="Events" funneltype="events" outputtype="XML">
+      <eventtypes>APPLICATION_ERROR,MEMORY,LICENSE</eventtypes>
+      <severities>WARN,ERROR</severities>
+      <applicationid>2</applicationid>
+      <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
+      <transformationplugin>com.appdynamics.integration.funnel.plugins.NoTransformationPlugin</transformationplugin>
+    </funnel> 
+  </funnels>
+</funnelconfig>

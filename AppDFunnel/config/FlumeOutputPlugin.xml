@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<config>
+	<flume_agent_server>cstp-controller</flume_agent_server>
+	<flume_agent_port>9191</flume_agent_port>
+</config>
