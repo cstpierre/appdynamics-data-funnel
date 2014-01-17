@@ -40,7 +40,8 @@
     <!-- metricpath:           The value of this field specfies which metrics will be     -->
     <!--                       returned to the funnel.  See the REST API documentation    -->
     <!--                       for valid values for metric path, or copy a metric path    -->
-    <!--                       out of the metric browser                                  -->
+    <!--                       out of the metric browser.  You can select multiple metric -->
+    <!--                       by specifying more than one metricpath nodes.              -->
     <!-- transformationplugin: Value of this field should be a class that                 -->
     <!--                       implements the interface FunnelTransformationInterface.    -->
     <!--                       The transformation plugin is run prior to the output       -->
@@ -69,6 +70,7 @@
       <rollup>false</rollup>
       <applicationid>Pet Clinic</applicationid>
       <metricpath>Application Infrastructure Performance|AppServer|Hardware Resources|CPU|%Busy</metricpath>
+      <metricpath>Application Infrastructure Performance|AppServer|Hardware Resources|CPU|%Idle</metricpath>
       <transformationplugin>com.appdynamics.integration.funnel.plugins.XmlToHtmlTransformationPlugin</transformationplugin>
       <funneloutplugin>com.appdynamics.integration.funnel.plugins.SystemOutputStreamPlugin</funneloutplugin>
     </funnel>

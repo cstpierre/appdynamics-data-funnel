@@ -1,8 +1,13 @@
 package com.appdynamics.integration.funnel.funneltypes;
 
 //DOM parsing classes
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dom4j.Element;
 import org.dom4j.Node;
+
+
 
 
 
@@ -27,7 +32,7 @@ public class MetricFunnel implements FunnelInterface, Runnable
 	// metric funnel specific variables
 	String 					rollup;
 	String					applicationid;
-	String					metricpath;
+	ArrayList <String>		metricpaths;
 	String					transformPluginClasspath;
 	String					funneloutPluginClasspath;
 	
@@ -42,6 +47,7 @@ public class MetricFunnel implements FunnelInterface, Runnable
 		name = funnelName;
 		output = outputType;
 		controllerConf = conf;
+		metricpaths = new ArrayList <String> ();
 		
 		if (startEpoch < 0)
 		{
@@ -77,6 +83,26 @@ public class MetricFunnel implements FunnelInterface, Runnable
 			rollup = nodeVal;
 		}
 		
+		List <Node> metricPathNodes = funnelDefinition.selectNodes( "metricpath" );
+		if (metricPathNodes.size() < 1)
+		{
+			throw new AppDFunnelInstantiationError("Unable to retrieve a metricpath node under this funnel definition. At least one metricpath node required. Cannot continue.");
+		}
+		else
+		{
+			for (int i = 0; i < metricPathNodes.size(); i++)
+			{
+				Node metricPathNode = metricPathNodes.get(i);
+				String nodeVal = metricPathNode.getText();
+				if ( nodeVal.isEmpty() )
+				{
+					throw new AppDFunnelInstantiationError("Value for metricpath must not be empty. Cannot continue.");
+				}
+				metricpaths.add(nodeVal);
+			}
+		}
+		
+		/*
 		Node metricPathNode = funnelDefinition.selectSingleNode( "metricpath" );
 		if (metricPathNode == null)
 		{
@@ -91,6 +117,7 @@ public class MetricFunnel implements FunnelInterface, Runnable
 			}
 			metricpath = nodeVal;
 		}
+		*/
 		
 		Node applicationIdNode = funnelDefinition.selectSingleNode( "applicationid" );
 		if (applicationIdNode == null)
@@ -173,7 +200,7 @@ public class MetricFunnel implements FunnelInterface, Runnable
 			builder.append("/controller/rest/applications/");
 			builder.append(java.net.URLEncoder.encode(applicationid, "ISO-8859-1"));
 			builder.append("/metric-data?metric-path=");
-			builder.append(java.net.URLEncoder.encode(metricpath, "ISO-8859-1"));
+			builder.append("REPLACE_WITH_METRIC_PATH");
 			builder.append("&time-range-type=BETWEEN_TIMES");
 			builder.append("&start-time=");
 			builder.append(startTimestamp);
@@ -199,9 +226,28 @@ public class MetricFunnel implements FunnelInterface, Runnable
 	public void executeFunnel() throws AppDFunnelExecutionError 
 	{
 		//System.out.println("Executing Metric Funnel: " + name);
-		// get the data from controller
-		String funnelData = FunnelExecutor.executRESTRequest(controllerConf.getUsername() + "@" + controllerConf.getAccountName(), controllerConf.getPassword(), controllerConf.getHostName(), controllerConf.getPortNumber(), getRESTURL());
-		
+		String baseRESTURL = getRESTURL();
+		String funnelData = "<metric_results>";
+		for (int i = 0; i < metricpaths.size(); i++)
+		{
+			// get the data from controller
+			String metricPathCurrent = metricpaths.get(i);
+			try
+			{
+				metricPathCurrent = java.net.URLEncoder.encode(metricPathCurrent, "ISO-8859-1");
+				metricPathCurrent = metricPathCurrent.replaceAll("\\+", "%20");
+			}
+			catch (Exception e)
+			{
+				throw new AppDFunnelExecutionError("Problem encoding REST URL components");
+			}
+			String restURLCurrent = baseRESTURL.replaceAll("REPLACE_WITH_METRIC_PATH", metricPathCurrent);
+			String funnelDataCurrent = FunnelExecutor.executRESTRequest(controllerConf.getUsername() + "@" + controllerConf.getAccountName(), controllerConf.getPassword(), controllerConf.getHostName(), controllerConf.getPortNumber(), restURLCurrent);
+			funnelData += "<metric_result>";
+			funnelData += funnelDataCurrent;
+			funnelData += "</metric_result>";
+		}
+		funnelData += "</metric_results>";
 		// transform the data
 		funnelData = xform.transform(funnelData, this);
 		
