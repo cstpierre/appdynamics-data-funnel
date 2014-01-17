@@ -8,7 +8,7 @@ a generalized data extraction / data transformation / data transport application
 
 1. Extracting data from a controller (metrics or otherwise)
 2. Performing some form of transformation on this data
-3. Passing the transformed data on - writing to a file store, or sending on to big data store
+3. Passing the transformed data on - writing to a file store, sending on to big data store, or creating custom metrics in AppD
 
 Currently, the application can leverage around 90% of the available REST API (including metrics). It is easily configurable via an XML file. Transformation is handled via plugins you can easily write in java. Output is also handled via plugins you can easily write in Java.
 
