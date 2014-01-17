@@ -13,6 +13,7 @@ a generalized data extraction / data transformation / data transport application
 Currently, the application can leverage around 90% of the available REST API (including metrics). It is easily configurable via an XML file. Transformation is handled via plugins you can easily write in java. Output is also handled via plugins you can easily write in Java.
 
 Currently, you can setup to run
+
 1. Several data extracts in a batch (in parallel or in sequence)
 2. Transformation - simple XML transformation plugin provided out of the box. Also inclues a basic calculation plugin as well.
 3. Output - currently will write to system output stream, files, Flume/Hadoop big data stores, or put metrics back into AppD via machine agent
