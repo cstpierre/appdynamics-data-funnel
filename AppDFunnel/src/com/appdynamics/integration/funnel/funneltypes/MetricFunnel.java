@@ -227,7 +227,7 @@ public class MetricFunnel implements FunnelInterface, Runnable
 	{
 		//System.out.println("Executing Metric Funnel: " + name);
 		String baseRESTURL = getRESTURL();
-		String funnelData = "<metric_results>";
+		String funnelData = "<MetricFunnelResults>";
 		for (int i = 0; i < metricpaths.size(); i++)
 		{
 			// get the data from controller
@@ -243,11 +243,11 @@ public class MetricFunnel implements FunnelInterface, Runnable
 			}
 			String restURLCurrent = baseRESTURL.replaceAll("REPLACE_WITH_METRIC_PATH", metricPathCurrent);
 			String funnelDataCurrent = FunnelExecutor.executRESTRequest(controllerConf.getUsername() + "@" + controllerConf.getAccountName(), controllerConf.getPassword(), controllerConf.getHostName(), controllerConf.getPortNumber(), restURLCurrent);
-			funnelData += "<metric_result>";
+			funnelData += "<MetricFunnelResult>";
 			funnelData += funnelDataCurrent;
-			funnelData += "</metric_result>";
+			funnelData += "</MetricFunnelResult>";
 		}
-		funnelData += "</metric_results>";
+		funnelData += "</MetricFunnelResults>";
 		// transform the data
 		funnelData = xform.transform(funnelData, this);
 		
