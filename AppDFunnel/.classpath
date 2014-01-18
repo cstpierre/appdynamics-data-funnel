@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="/Users/chris.stpierre/git/appdynamics-data-funnel/AppDFunnel/UtilityLibraries/httpcomponents-client-4.3.1-bin/lib/httpcore-4.3.jar"/>
 	<classpathentry kind="lib" path="/Users/chris.stpierre/git/appdynamics-data-funnel/AppDFunnel/UtilityLibraries/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="/Users/chris.stpierre/git/appdynamics-data-funnel/AppDFunnel/UtilityLibraries/jaxen-1.1.6/jaxen-1.1.6.jar"/>
+	<classpathentry kind="lib" path="/Users/chris.stpierre/git/appdynamics-data-funnel/AppDFunnel/UtilityLibraries/exp4j-0.3.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
