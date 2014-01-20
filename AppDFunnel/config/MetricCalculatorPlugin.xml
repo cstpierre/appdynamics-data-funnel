@@ -1,4 +1,37 @@
 <?xml version="1.0"?>
 <config>
-	<outputdirectory>/Users/chris.stpierre/AppDFunnel/fileout</outputdirectory>
+	<!-- you select metrics from the output of a metric funnel. There must be as many MetricFunnelResult nodes as there are      -->
+	<!-- defined variables.  The xpath expression has to start at the MetricFunnelResult node, and there must be the same number -->
+	<!-- of values returned for each xpath expression. The math function will be performed on each result                        -->
+	<metricspaths>
+		<metricpath varname="x" metricpath="">//foo/bar/attrname1</metricpath>
+		<metricpath varname="y" metricpath="">//foo/bar/attrname2</metricpath>
+	</metricpaths>
+	<!-- see documentation here about the mathematical expresions supported: http://www.objecthunter.net/tinybo/blog/articles/86 -->
+	<!-- the following are all supported:                                                                                        -->
+	<!--       Addition                                                                                                          -->
+	<!--       Subtraction                                                                                                       -->
+	<!--       Multiplication                                                                                                    -->
+	<!--       Divison                                                                                                           -->
+	<!--       Modulo                                                                                                            -->
+	<!--       Exponentiation                                                                                                    -->
+	<!--       Unary minus, plus                                                                                                 -->
+	<!--       abs: absolute value                                                                                               -->
+	<!--       acos: arc cosine                                                                                                  -->
+	<!--       asin: arc sine                                                                                                    -->
+	<!--       atan: arc tangent                                                                                                 -->
+	<!--       cbrt: cubic root                                                                                                  -->
+	<!--       ceil: next integer value                                                                                          -->
+	<!--       cos: the cosine                                                                                                   -->
+	<!--       cosh: hyperbolic cosine                                                                                           -->
+	<!--       exp: euler's number raised to the value (e^x)                                                                     -->
+	<!--       floor: previous integer value                                                                                     -->
+	<!--       log: logarithmus naturalis (base e)                                                                               -->
+	<!--       sin: sine                                                                                                         -->
+	<!--       sinh: hyerbolic sine                                                                                              -->
+	<!--       sqrt: square root                                                                                                 -->
+	<!--       tan: tangent                                                                                                      -->
+	<!--       tanh: hyperbolic tangent                                                                                          -->
+	<function>f(x,y)=x/y</function>
+	<outputtype>
 </config>
