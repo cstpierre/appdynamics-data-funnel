@@ -33,5 +33,4 @@
 	<!--       tan: tangent                                                                                                      -->
 	<!--       tanh: hyperbolic tangent                                                                                          -->
 	<function>f(x,y)=x/y</function>
-	<outputtype>
 </config>
